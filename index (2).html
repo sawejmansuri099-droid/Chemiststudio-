@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chemist Studio — Dental Growth Automation Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F8FAFC;
+    --primary:#2563EB;
+    --primary-dark:#1D4ED8;
+    --secondary:#14B8A6;
+    --accent:#22C55E;
+    --card:#FFFFFF;
+    --text:#0F172A;
+    --text-soft:#475569;
+    --border:#E2E8F0;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Plus Jakarta Sans', sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .container{max-width:1200px;margin:0 auto;padding:0 24px;}
+
+  /* NAVBAR */
+  .navbar{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:18px 0;
+    transition:all .35s ease;
+    border-bottom:1px solid transparent;
+  }
+  .navbar.scrolled{
+    background:rgba(248,250,252,0.75);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+    padding:12px 0;
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-0.02em;}
+  .logo-mark{
+    width:34px;height:34px;border-radius:10px;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    display:flex;align-items:center;justify-content:center;font-size:16px;
+    box-shadow:0 4px 14px rgba(37,99,235,0.35);
+  }
+  .nav-links{display:flex;gap:32px;align-items:center;}
+  .nav-links a{color:var(--text-soft);text-decoration:none;font-size:14.5px;font-weight:500;transition:color .2s;}
+  .nav-links a:hover{color:var(--text);}
+  .nav-cta{display:flex;gap:12px;align-items:center;}
+
+  /* BUTTONS */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:13px 26px;border-radius:12px;font-weight:600;font-size:14.5px;
+    text-decoration:none;cursor:pointer;border:none;transition:all .25s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--primary),#3B82F6);
+    color:white;box-shadow:0 8px 20px rgba(37,99,235,0.28);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(37,99,235,0.38);}
+  .btn-secondary{
+    background:white;color:var(--text);border:1.5px solid var(--border);
+  }
+  .btn-secondary:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);}
+  .btn-sm{padding:9px 18px;font-size:13.5px;}
+  .btn-white{background:white;color:var(--primary);}
+  .btn-white:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,0.15);}
+  .btn-ghost-light{background:rgba(255,255,255,0.12);color:white;border:1.5px solid rgba(255,255,255,0.35);}
+  .btn-ghost-light:hover{background:rgba(255,255,255,0.2);transform:translateY(-2px);}
+
+  /* BADGE */
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:white;border:1px solid var(--border);
+    padding:8px 16px;border-radius:100px;font-size:13.5px;font-weight:600;
+    color:var(--text-soft);box-shadow:0 2px 8px rgba(15,23,42,0.04);
+  }
+
+  /* HERO */
+  .hero{
+    position:relative;padding:150px 0 100px;overflow:hidden;
+  }
+  .hero-bg-shape{
+    position:absolute;border-radius:50%;filter:blur(80px);opacity:0.35;z-index:0;
+  }
+  .shape1{width:500px;height:500px;background:radial-gradient(circle,var(--primary),transparent 70%);top:-180px;left:-150px;}
+  .shape2{width:450px;height:450px;background:radial-gradient(circle,var(--secondary),transparent 70%);top:100px;right:-180px;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:60px;align-items:center;position:relative;z-index:1;}
+  .hero h1{
+    font-size:52px;line-height:1.12;font-weight:800;letter-spacing:-0.03em;margin:22px 0 20px;
+  }
+  .hero h1 .highlight{
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.sub{font-size:17px;line-height:1.65;color:var(--text-soft);max-width:520px;margin-bottom:34px;}
+  .hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+
+  /* HERO VISUAL */
+  .hero-visual{position:relative;height:520px;}
+  .mock-dashboard{
+    position:absolute;top:20px;left:0;width:100%;
+    background:white;border-radius:20px;border:1px solid var(--border);
+    box-shadow:0 30px 70px -20px rgba(15,23,42,0.25);
+    overflow:hidden;
+  }
+  .mock-topbar{background:#0F172A;padding:10px 16px;display:flex;gap:6px;align-items:center;}
+  .mock-dot{width:10px;height:10px;border-radius:50%;}
+  .mock-body{padding:22px;}
+  .mock-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:12px;background:#F8FAFC;margin-bottom:10px;border:1px solid var(--border);}
+  .mock-patient{display:flex;align-items:center;gap:10px;}
+  .mock-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:700;}
+  .status-pill{padding:4px 11px;border-radius:100px;font-size:11.5px;font-weight:700;}
+  .pill-delivered{background:#DBEAFE;color:#1D4ED8;}
+  .pill-opened{background:#FEF3C7;color:#B45309;}
+  .pill-completed{background:#DCFCE7;color:#15803D;}
+
+  .float-card{
+    position:absolute;background:white;border-radius:16px;border:1px solid var(--border);
+    box-shadow:0 20px 45px -12px rgba(15,23,42,0.22);padding:14px 16px;
+    animation:floaty 5s ease-in-out infinite;
+  }
+  .float-whatsapp{bottom:30px;left:-40px;width:240px;animation-delay:.2s;}
+  .float-review{top:-10px;right:-30px;width:200px;animation-delay:.8s;}
+  @keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+  .stars{color:#FBBF24;font-size:14px;letter-spacing:2px;}
+
+  /* SECTIONS GENERAL */
+  section{padding:110px 0;}
+  .eyebrow{color:var(--primary);font-weight:700;font-size:13.5px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:14px;display:block;}
+  .section-head{max-width:640px;margin-bottom:56px;}
+  .section-head h2{font-size:38px;font-weight:800;letter-spacing:-0.03em;line-height:1.2;margin-bottom:16px;}
+  .section-head p{color:var(--text-soft);font-size:16.5px;line-height:1.6;}
+  .center{text-align:center;margin-left:auto;margin-right:auto;}
+
+  /* TRUST BAR */
+  .trust-bar{background:white;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 0;}
+  .trust-label{text-align:center;color:var(--text-soft);font-size:13.5px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:36px;}
+  .trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .trust-stat{text-align:center;}
+  .trust-stat .num{font-size:38px;font-weight:800;letter-spacing:-0.02em;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .trust-stat .lbl{color:var(--text-soft);font-size:14px;margin-top:4px;font-weight:500;}
+
+  /* ABOUT */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+  .about-visual{
+    background:linear-gradient(135deg,rgba(37,99,235,0.06),rgba(20,184,166,0.06));
+    border:1px solid var(--border);border-radius:24px;padding:40px;
+  }
+  .about-check-list{display:flex;flex-direction:column;gap:16px;margin-top:10px;}
+  .about-check{display:flex;gap:12px;align-items:flex-start;}
+  .check-icon{width:24px;height:24px;border-radius:50%;background:var(--accent);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:white;font-size:13px;margin-top:2px;}
+
+  /* PROBLEM FLOW */
+  .problem-section{background:white;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .flow-row{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin:50px 0;}
+  .flow-node{
+    background:var(--bg);border:1px solid var(--border);border-radius:16px;
+    padding:20px 22px;text-align:center;min-width:150px;
+  }
+  .flow-node .emoji{font-size:26px;display:block;margin-bottom:10px;}
+  .flow-node .label{font-weight:700;font-size:14.5px;}
+  .flow-arrow{color:var(--border);font-size:22px;font-weight:700;}
+  .flow-node.dead{border-color:#FCA5A5;background:#FEF2F2;}
+  .flow-node.dead .label{color:#DC2626;}
+  .problem-bottom{text-align:center;font-size:19px;font-weight:600;color:var(--text-soft);max-width:560px;margin:0 auto;}
+  .problem-bottom strong{color:var(--text);}
+
+  /* SOLUTION STEPS */
+  .steps-wrap{display:flex;flex-direction:column;max-width:680px;margin:0 auto;}
+  .step-item{display:flex;gap:22px;padding:26px 0;position:relative;}
+  .step-item:not(:last-child)::after{
+    content:'';position:absolute;left:23px;top:64px;bottom:-14px;width:2px;
+    background:repeating-linear-gradient(to bottom,var(--border) 0 6px,transparent 6px 12px);
+  }
+  .step-num{
+    width:48px;height:48px;border-radius:14px;flex-shrink:0;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:17px;box-shadow:0 6px 16px rgba(37,99,235,0.25);
+  }
+  .step-content h4{font-size:17.5px;font-weight:700;margin-bottom:6px;}
+  .step-content p{color:var(--text-soft);font-size:15px;line-height:1.55;}
+
+  /* WHY WHATSAPP */
+  .ww-section{background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:32px;margin:0 24px;padding:80px 60px;color:white;}
+  .ww-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:44px;}
+  .ww-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:26px;text-align:center;}
+  .ww-card .icon{font-size:28px;margin-bottom:14px;}
+  .ww-card h4{font-size:15.5px;font-weight:700;margin-bottom:6px;}
+  .ww-card p{color:#94A3B8;font-size:13.5px;line-height:1.5;}
+  .ww-tap{text-align:center;margin-top:44px;font-size:22px;font-weight:700;}
+  .ww-tap span{color:var(--secondary);}
+
+  /* BENEFITS */
+  .benefits-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+  .benefit-card{
+    background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px 24px;
+    transition:all .3s ease;
+  }
+  .benefit-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px -14px rgba(15,23,42,0.15);border-color:transparent;}
+  .benefit-icon{
+    width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    font-size:20px;margin-bottom:16px;
+    background:linear-gradient(135deg,rgba(37,99,235,0.1),rgba(20,184,166,0.1));
+  }
+  .benefit-card h4{font-size:16px;font-weight:700;margin-bottom:6px;}
+  .benefit-card p{color:var(--text-soft);font-size:14px;line-height:1.5;}
+
+  /* DASHBOARD SHOWCASE */
+  .dash-showcase{
+    background:white;border:1px solid var(--border);border-radius:28px;
+    box-shadow:0 40px 90px -30px rgba(15,23,42,0.2);overflow:hidden;
+  }
+  .dash-header{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#FAFBFF,#F8FAFC);}
+  .dash-header h4{font-weight:700;font-size:16px;}
+  .dash-table{width:100%;border-collapse:collapse;}
+  .dash-table th{text-align:left;padding:14px 28px;font-size:12.5px;color:var(--text-soft);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--border);}
+  .dash-table td{padding:16px 28px;border-bottom:1px solid var(--border);font-size:14.5px;}
+  .dash-table tr:last-child td{border-bottom:none;}
+  .dash-patient{display:flex;align-items:center;gap:10px;font-weight:600;}
+
+  /* BEFORE AFTER */
+  .ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .ba-card{border-radius:22px;padding:34px;border:1px solid var(--border);}
+  .ba-before{background:#FEF2F2;border-color:#FECACA;}
+  .ba-after{background:#F0FDF4;border-color:#BBF7D0;}
+  .ba-title{font-size:20px;font-weight:800;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+  .ba-list{list-style:none;display:flex;flex-direction:column;gap:14px;}
+  .ba-list li{display:flex;gap:10px;font-size:15px;font-weight:500;align-items:flex-start;}
+
+  /* TESTIMONIAL */
+  .testi-card{
+    max-width:720px;margin:0 auto;background:white;border:1px solid var(--border);
+    border-radius:24px;padding:48px;box-shadow:0 24px 60px -20px rgba(15,23,42,0.15);text-align:center;
+  }
+  .testi-quote{font-size:19px;line-height:1.6;font-weight:600;color:var(--text);margin:20px 0 28px;}
+  .testi-author{display:flex;align-items:center;justify-content:center;gap:12px;}
+  .testi-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;}
+  .testi-name{font-weight:700;font-size:15px;}
+  .testi-role{color:var(--text-soft);font-size:13.5px;}
+
+  /* FAQ */
+  .faq-item{border-bottom:1px solid var(--border);}
+  .faq-q{
+    display:flex;justify-content:space-between;align-items:center;padding:24px 4px;
+    cursor:pointer;font-weight:700;font-size:16px;
+  }
+  .faq-icon{transition:transform .3s ease;color:var(--primary);font-size:20px;flex-shrink:0;}
+  .faq-item.open .faq-icon{transform:rotate(45deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .faq-a p{padding:0 4px 24px;color:var(--text-soft);font-size:15px;line-height:1.6;max-width:640px;}
+
+  /* FINAL CTA */
+  .final-cta{
+    background:linear-gradient(135deg,var(--primary),#0EA5A0);
+    border-radius:32px;margin:0 24px;padding:80px 40px;text-align:center;color:white;position:relative;overflow:hidden;
+  }
+  .final-cta h2{font-size:38px;font-weight:800;letter-spacing:-0.02em;margin-bottom:18px;}
+  .final-cta p{font-size:17px;opacity:0.92;max-width:560px;margin:0 auto 34px;line-height:1.6;}
+  .final-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+  /* FOOTER */
+  footer{padding:70px 0 30px;}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px;}
+  .footer-brand p{color:var(--text-soft);font-size:14px;margin-top:12px;max-width:260px;line-height:1.6;}
+  .footer-col h5{font-size:13.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-soft);margin-bottom:16px;}
+  .footer-col a{display:block;color:var(--text);text-decoration:none;font-size:14.5px;margin-bottom:12px;transition:color .2s;}
+  .footer-col a:hover{color:var(--primary);}
+  .footer-bottom{border-top:1px solid var(--border);padding-top:26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  .footer-bottom p{color:var(--text-soft);font-size:13.5px;}
+  .social-row{display:flex;gap:14px;}
+  .social-row a{width:36px;height:36px;border-radius:10px;background:white;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--text-soft);transition:all .2s;}
+  .social-row a:hover{color:var(--primary);border-color:var(--primary);}
+
+  /* SCROLL REVEAL */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  /* RESPONSIVE */
+  @media (max-width:960px){
+    .nav-links{display:none;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero h1{font-size:38px;}
+    .hero-visual{height:400px;margin-top:20px;}
+    .about-grid{grid-template-columns:1fr;}
+    .trust-grid{grid-template-columns:repeat(2,1fr);}
+    .ww-grid{grid-template-columns:repeat(2,1fr);}
+    .benefits-grid{grid-template-columns:repeat(2,1fr);}
+    .ba-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+    .ww-section{padding:56px 28px;margin:0 12px;}
+    section{padding:70px 0;}
+    .section-head h2{font-size:28px;}
+    .final-cta h2{font-size:28px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="container nav-inner">
+    <div class="logo">
+      <div class="logo-mark">🦷</div>
+      Chemist Studio
+    </div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#solution">How It Works</a>
+      <a href="#benefits">Benefits</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#demo" class="btn btn-primary btn-sm">Book Free Demo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-shape shape1"></div>
+  <div class="hero-bg-shape shape2"></div>
+  <div class="container hero-grid">
+    <div>
+      <span class="badge">🦷 Built Exclusively For Dental Clinics</span>
+      <h1>Helping Dental Clinics Get More <span class="highlight">Google Reviews</span> — Automatically.</h1>
+      <p class="sub">Aapke patients toh already treatment se khush hote hain. Bas review dena bhool jaate hain. Chemist Studio har visit ke baad ek professional WhatsApp review request bhejta hai — patient ke liye sirf one tap mein review dena easy ban jaata hai.</p>
+      <div class="hero-btns">
+        <a href="#demo" class="btn btn-primary">Book Free Demo</a>
+        <a href="#solution" class="btn btn-secondary">Watch Live Demo</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="mock-dashboard">
+        <div class="mock-topbar">
+          <div class="mock-dot" style="background:#EF4444"></div>
+          <div class="mock-dot" style="background:#F59E0B"></div>
+          <div class="mock-dot" style="background:#22C55E"></div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-row">
+            <div class="mock-patient"><div class="mock-avatar">RS</div>Rohit Sharma</div>
+            <span class="status-pill pill-completed">Completed</span>
+          </div>
+          <div class="mock-row">
+            <div class="mock-patient"><div class="mock-avatar">AK</div>Ankita Kapoor</div>
+            <span class="status-pill pill-opened">Opened</span>
+          </div>
+          <div class="mock-row">
+            <div class="mock-patient"><div class="mock-avatar">VJ</div>Vikram Joshi</div>
+            <span class="status-pill pill-delivered">Delivered</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="float-card float-whatsapp">
+        <div style="font-size:12px;color:#64748B;font-weight:600;margin-bottom:6px;">💬 WhatsApp</div>
+        <div style="font-size:13.5px;font-weight:600;line-height:1.4;">Thank you for visiting Dr. Mehta's Clinic! Tap below to share your experience 👇</div>
+        <div style="margin-top:10px;background:var(--accent);color:white;text-align:center;padding:8px;border-radius:8px;font-size:12.5px;font-weight:700;">⭐ Leave a Review</div>
+      </div>
+
+      <div class="float-card float-review">
+        <div class="stars">★★★★★</div>
+        <div style="font-size:12.5px;color:var(--text-soft);margin-top:6px;">"Best dental experience ever!"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<section class="trust-bar" style="padding:56px 0;">
+  <div class="container">
+    <p class="trust-label reveal">Trusted By Growing Dental Clinics</p>
+    <div class="trust-grid">
+      <div class="trust-stat reveal"><div class="num">300+</div><div class="lbl">Dental Clinics</div></div>
+      <div class="trust-stat reveal"><div class="num">25,000+</div><div class="lbl">Patients Reached</div></div>
+      <div class="trust-stat reveal"><div class="num">96%</div><div class="lbl">Message Open Rate</div></div>
+      <div class="trust-stat reveal"><div class="num">4.9★</div><div class="lbl">Client Rating</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container about-grid">
+    <div class="reveal">
+      <span class="eyebrow">About Chemist Studio</span>
+      <h2 style="font-size:36px;font-weight:800;letter-spacing:-0.03em;line-height:1.2;margin-bottom:18px;">Technology Built For Dentists.</h2>
+      <p style="color:var(--text-soft);font-size:16.5px;line-height:1.7;margin-bottom:10px;">Generic CRM software se hatke, Chemist Studio sirf Dental Clinics ke liye bana hai. Hum samajhte hain reception workflows, patient communication, aur why satisfied patients often review dena bhool jaate hain.</p>
+      <p style="color:var(--text-soft);font-size:16.5px;line-height:1.7;">That's why every single feature is designed specifically for dental practices — not adapted from some generic template.</p>
+    </div>
+    <div class="about-visual reveal">
+      <div class="about-check-list">
+        <div class="about-check">
+          <div class="check-icon">✓</div>
+          <div><strong>Reception-friendly</strong><br><span style="color:var(--text-soft);font-size:14.5px;">Koi tech training nahi chahiye. Bas number enter karo.</span></div>
+        </div>
+        <div class="about-check">
+          <div class="check-icon">✓</div>
+          <div><strong>Dental-specific workflows</strong><br><span style="color:var(--text-soft);font-size:14.5px;">Built around real clinic timing, not generic sales CRMs.</span></div>
+        </div>
+        <div class="about-check">
+          <div class="check-icon">✓</div>
+          <div><strong>Zero patient friction</strong><br><span style="color:var(--text-soft);font-size:14.5px;">Patient ko koi app install nahi karna — bas WhatsApp.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem-section">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">The Real Problem</span>
+      <h2>Your Happy Patients Walk Out... <br>Their Reviews Don't.</h2>
+    </div>
+    <div class="flow-row reveal">
+      <div class="flow-node"><span class="emoji">😊</span><span class="label">Patient Smiling</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node"><span class="emoji">🚪</span><span class="label">Leaves Clinic</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node"><span class="emoji">📅</span><span class="label">Busy Schedule</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node"><span class="emoji">🤔</span><span class="label">Forgets</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-node dead"><span class="emoji">✖️</span><span class="label">No Google Review</span></div>
+    </div>
+    <p class="problem-bottom reveal">Problem aapke treatment mein nahi hai. <strong>Problem sirf timing hai.</strong></p>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">How It Works</span>
+      <h2>Simple For Your Team. <br>Effortless For Patients.</h2>
+      <p>Ek seedha, automated process jo aapki reception team turant use kar sakti hai.</p>
+    </div>
+    <div class="steps-wrap">
+      <div class="step-item reveal">
+        <div class="step-num">1</div>
+        <div class="step-content"><h4>Reception enters patient number</h4><p>Bas 10 seconds ka kaam — patient ka WhatsApp number dashboard mein daalein.</p></div>
+      </div>
+      <div class="step-item reveal">
+        <div class="step-num">2</div>
+        <div class="step-content"><h4>WhatsApp review message sent</h4><p>Chemist Studio automatically ek professional, branded message bhejta hai.</p></div>
+      </div>
+      <div class="step-item reveal">
+        <div class="step-num">3</div>
+        <div class="step-content"><h4>Patient taps "Leave Review"</h4><p>No app, no login — sirf ek tap patient ke phone par.</p></div>
+      </div>
+      <div class="step-item reveal">
+        <div class="step-num">4</div>
+        <div class="step-content"><h4>Google Review opens directly</h4><p>Seedha aapke clinic ke Google profile par redirect hota hai.</p></div>
+      </div>
+      <div class="step-item reveal">
+        <div class="step-num">5</div>
+        <div class="step-content"><h4>Patient submits review</h4><p>Real, genuine reviews — bina kisi manual follow-up ke.</p></div>
+      </div>
+      <div class="step-item reveal">
+        <div class="step-num">6</div>
+        <div class="step-content"><h4>Clinic reputation grows</h4><p>Har patient ek naya 5-star review banta hai, automatically.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY WHATSAPP -->
+<section>
+  <div class="container">
+    <div class="ww-section reveal">
+      <div class="section-head center" style="margin-bottom:0;">
+        <span class="eyebrow" style="color:var(--secondary);">The Channel That Works</span>
+        <h2 style="color:white;">Why WhatsApp?</h2>
+        <p style="color:#94A3B8;">Patients already WhatsApp daily use karte hain — koi naya habit nahi banana padta.</p>
+      </div>
+      <div class="ww-grid">
+        <div class="ww-card"><div class="icon">📵</div><h4>No App Installation</h4><p>Patient ke phone mein WhatsApp already hai.</p></div>
+        <div class="ww-card"><div class="icon">🔓</div><h4>No Login</h4><p>Koi password, koi account setup nahi.</p></div>
+        <div class="ww-card"><div class="icon">🧠</div><h4>No Confusion</h4><p>Message simple hai — samajhna easy hai.</p></div>
+        <div class="ww-card"><div class="icon">👵</div><h4>No Technical Knowledge</h4><p>Har age group ke patient ke liye kaam karta hai.</p></div>
+      </div>
+      <p class="ww-tap">Just <span>One Tap.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section id="benefits">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Why Clinics Choose Us</span>
+      <h2>Everything Your Clinic Needs To Grow</h2>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card reveal"><div class="benefit-icon">⭐</div><h4>Increase Google Reviews</h4><p>Consistent, real reviews har hafte.</p></div>
+      <div class="benefit-card reveal"><div class="benefit-icon">📍</div><h4>Improve Local SEO</h4><p>Zyada reviews matlab better Google ranking.</p></div>
+      <div class="benefit-card reveal"><div class="benefit-icon">🤝</div><h4>Build Instant Trust</h4><p>New patients aapki reputation dekh kar aate hain.</p></div>
+      <div class="benefit-card reveal"><div class="benefit-icon">📈</div><h4>Get More New Patients</h4><p>Strong reviews directly patient inflow badhate hain.</p></div>
+      <div class="benefit-card reveal"><div class="benefit-icon">🔁</div><h4>Automate Follow-Ups</h4><p>Manual reminders ki zarurat khatam.</p></div>
+      <div class="benefit-card reveal"><div class="benefit-icon">🧑‍💼</div><h4>Reception Friendly</h4><p>Koi training curve nahi — turant use karo.</p></div>
+      <div class="benefit-card reveal"><div class="benefit-icon">📊</div><h4>Simple Dashboard</h4><p>Ek nazar mein saara status dikhta hai.</p></div>
+      <div class="benefit-card reveal"><div class="benefit-icon">⏱️</div><h4>Save Staff Time</h4><p>Manual follow-up calls ki jagah automation.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD SHOWCASE -->
+<section>
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Your Command Center</span>
+      <h2>A Dashboard Your Reception Will Actually Enjoy</h2>
+      <p>Minimal, clean aur samajhne mein easy — kisi bhi tech background wale staff ke liye.</p>
+    </div>
+    <div class="dash-showcase reveal">
+      <div class="dash-header">
+        <h4>Patient Review Requests</h4>
+        <a href="#demo" class="btn btn-primary btn-sm">+ Send Review</a>
+      </div>
+      <table class="dash-table">
+        <thead><tr><th>Patient Name</th><th>Phone Number</th><th>Review Status</th></tr></thead>
+        <tbody>
+          <tr><td><div class="dash-patient"><div class="mock-avatar">PS</div>Priya Singh</div></td><td class="mono">+91 98xxxxxx21</td><td><span class="status-pill pill-completed">Completed</span></td></tr>
+          <tr><td><div class="dash-patient"><div class="mock-avatar">AM</div>Arjun Mehta</div></td><td class="mono">+91 97xxxxxx88</td><td><span class="status-pill pill-opened">Opened</span></td></tr>
+          <tr><td><div class="dash-patient"><div class="mock-avatar">SK</div>Sneha Kulkarni</div></td><td class="mono">+91 99xxxxxx45</td><td><span class="status-pill pill-delivered">Delivered</span></td></tr>
+          <tr><td><div class="dash-patient"><div class="mock-avatar">NR</div>Nikhil Rao</div></td><td class="mono">+91 98xxxxxx09</td><td><span class="status-pill pill-completed">Completed</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE AFTER -->
+<section>
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">The Transformation</span>
+      <h2>Before Chemist Studio vs After</h2>
+    </div>
+    <div class="ba-grid">
+      <div class="ba-card ba-before reveal">
+        <div class="ba-title">😕 Before</div>
+        <ul class="ba-list">
+          <li>❌ Few reviews</li>
+          <li>❌ Patients forget</li>
+          <li>❌ Low Google ranking</li>
+          <li>❌ Weak online presence</li>
+        </ul>
+      </div>
+      <div class="ba-card ba-after reveal">
+        <div class="ba-title">😊 After</div>
+        <ul class="ba-list">
+          <li>✅ Consistent reviews</li>
+          <li>✅ Automatic follow-ups</li>
+          <li>✅ Higher visibility</li>
+          <li>✅ More patient trust</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Real Clinics, Real Results</span>
+      <h2>What Dentists Are Saying</h2>
+    </div>
+    <div class="testi-card reveal">
+      <div class="stars" style="font-size:20px;">★★★★★</div>
+      <p class="testi-quote">"Hum manually reviews maangte the, lekin patients usually bhool jaate the. Chemist Studio ne poora process effortless bana diya — few weeks mein hi humara Google profile consistently grow karne laga."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">RS</div>
+        <div style="text-align:left;">
+          <div class="testi-name">Dr. Rahul Sharma</div>
+          <div class="testi-role">Dental Surgeon</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container" style="max-width:800px;">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Common Questions</span>
+      <h2>Frequently Asked Questions</h2>
+    </div>
+    <div class="reveal">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How does it work? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Aapki reception patient ka WhatsApp number dashboard mein add karti hai. Chemist Studio automatically ek review request bhej deta hai — patient tap karta hai aur Google Review page seedha khul jaata hai.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Can my receptionist use it? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Bilkul. Dashboard itna simple hai ki koi bhi team member 5 minute mein seekh sakta hai — koi technical background zaroori nahi.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Does the patient need another app? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Nahi. Sab kuch WhatsApp par hota hai, jo patient already use karta hai. Koi extra download ya signup nahi chahiye.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How long does setup take? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Most clinics ek hi din mein live ho jaate hain. Hamari team aapke Google Business profile ko connect karke poora setup kar deti hai.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is training included? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Haan, onboarding ke saath free training session included hai — aapki poori reception team ke liye.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is patient data secure? <span class="faq-icon">+</span></div>
+        <div class="faq-a"><p>Bilkul. Patient data encrypted rehta hai aur sirf review request ke purpose se use hota hai — kabhi bhi third parties ke saath share nahi kiya jaata.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="demo">
+  <div class="container">
+    <div class="final-cta reveal">
+      <h2>Every Happy Patient Is A Growth Opportunity.</h2>
+      <p>Aapke patients already aapke treatment par trust karte hain. Ab unhe future patients ka trust build karne mein bhi madad karne dijiye.</p>
+      <div class="final-btns">
+        <a href="#" class="btn btn-white">Book Demo</a>
+        <a href="#" class="btn btn-ghost-light">Talk To Our Team</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><div class="logo-mark">🦷</div>Chemist Studio</div>
+        <p>Built exclusively for dental clinics. Dental growth automation platform — helping clinics turn happy patients into 5-star Google reviews.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Support</h5>
+        <a href="#">WhatsApp Support</a>
+        <a href="#">Email Us</a>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+      <div class="footer-col">
+        <h5>Follow</h5>
+        <div class="social-row">
+          <a href="#">IG</a>
+          <a href="#">in</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Chemist Studio. All rights reserved.</p>
+      <p>Made for dentists, by people who understand dentistry.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 20){ navbar.classList.add('scrolled'); }
+    else { navbar.classList.remove('scrolled'); }
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // FAQ accordion
+  function toggleFaq(el){
+    const item = el.parentElement;
+    const answer = item.querySelector('.faq-a');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-a').style.maxHeight = null;
+    });
+    if(!wasOpen){
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  }
+</script>
+
+</body>
+</html>
